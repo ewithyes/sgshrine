@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SupergirlShrine.Api/SupergirlShrine.Api.csproj" />
+  <Project Path="SupergirlShrine.Core/SupergirlShrine.Core.csproj" />
+  <Project Path="SupergirlShrine.Infrastructure/SupergirlShrine.Infrastructure.csproj" />
+</Solution>

@@ -1,0 +1,24 @@
+## .NET
+bin/
+obj/
+*.user
+
+## User secrets
+**/appsettings.Development.json
+**/appsettings.Local.json
+SupergirlShrine.Infrastructure/Data/ComicDbContextFactory.cs
+
+## macOS
+.DS_Store
+
+## VS Code
+.vscode/*
+!.vscode/extensions.json
+
+## Rider/Visual Studio
+.vs/
+*.suo
+
+## Environment/local config
+.env
+
