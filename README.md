@@ -10,12 +10,7 @@ A personal digital archive and reader for Supergirl comics, built as a learning 
 
 ## Project Structure
 
-SupergirlShrine/
-├── SupergirlShrine.Api/ # Minimal API entry point, endpoints
-├── SupergirlShrine.Core/ # Domain entities (Comic, Chapter, Page)
-├── SupergirlShrine.Infrastructure/ # EF Core DbContext, migrations, import logic
-└── SupergirlShrine.sln
-
+<img width="628" height="125" alt="Screenshot 2026-08-02 at 13 38 30" src="https://github.com/user-attachments/assets/c40e8a30-9065-418d-8f3f-4834173f3b4c" />
 
 ## Data Model
 `Comic` → `Chapter` (issue/volume) → `Page`
@@ -30,7 +25,7 @@ Each comic represents a distinct Supergirl run/series (e.g. Woman of Tomorrow, R
 - A Cloudflare R2 bucket + API token
 
 ### Configuration
-This project uses [.NET User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) for local credentials — never commit connection strings or API keys.
+This project uses [.NET User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) for local credentials, so I never commit connection strings or API keys.
 
 ```bash
 cd SupergirlShrine.Api
