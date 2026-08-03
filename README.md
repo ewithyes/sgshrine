@@ -42,13 +42,63 @@ dotnet ef database update --project ../SupergirlShrine.Infrastructure --startup-
 ```bash
 dotnet run --project SupergirlShrine.Api
 ```
+## Importing Comics
+
+Comics are added via a two-step manual pipeline: PDFs are converted to page images, then imported into the database and cloud storage.
+
+### 1. Download & convert PDFs
+
+Download comic issue PDFs manually (one folder per comic run), then convert them to zero-padded chapter folders of JPGs:
+
+```bash
+./scripts/convert-pdfs.sh  
+```
+
+**Example:**
+```bash
+./scripts/convert-pdfs.sh ~/Documents/comics/pdfs-inbox ~/Documents/comics/NewComicTitle
+```
+
+Notes:
+- Put all PDFs for one comic run in a single input folder first
+- Name PDFs so alphabetical order matches issue order (`01-issue.pdf`, `02-issue.pdf`, ...)
+- Output: `Chapter01/`, `Chapter02/`, ... each full of `page-01.jpg`, `page-02.jpg`, ...
+
+### 2. Import into R2 + Supabase
+
+```bash
+dotnet run --project SupergirlShrine.ImportTool -- "" 
+```
+
+**Example:**
+```bash
+dotnet run --project SupergirlShrine.ImportTool -- "Rebirth" ~/Documents/comics/Rebirth
+```
+
+This uploads every page image to Cloudflare R2 and writes the `Comic` → `Chapter` → `Page` records to Supabase in one run.
+
+### Full workflow, start to finish
+
+```bash
+# 1. Download PDFs manually into one inbox folder
+
+# 2. Convert
+./scripts/convert-pdfs.sh ~/Documents/comics/pdfs-inbox ~/Documents/comics/
+
+# 3. Import
+dotnet run --project SupergirlShrine.ImportTool -- "" ~/Documents/comics/
+```
+
+Both commands are run from the solution root.
 
 ## Status
-Work in progress; currently building the import pipeline.
+🚧 Work in progress — import pipeline complete, building out the API and reader UI next.
 
 ## Roadmap
 - [x] Core domain model + EF Core migrations
 - [x] Cloudflare R2 storage setup
-- [ ] Console import tool (natural sort, batch upload)
+- [x] Console import tool (batch upload, PDF→JPG conversion script)
 - [ ] Minimal API endpoints
-- [ ] Reader frontend + UI for manual import eventually
+- [ ] Reader frontend
+- [ ] Potentially: a user interface for adding comics through the app itself, instead of just scripts
+ 
