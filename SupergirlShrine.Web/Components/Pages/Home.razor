@@ -1,0 +1,41 @@
+﻿@page "/"
+@using SupergirlShrine.Web.Models
+@inject IHttpClientFactory HttpClientFactory
+
+<PageTitle>Supergirl Shrine</PageTitle>
+
+<h1>Supergirl Shrine</h1>
+
+@if (comics is null)
+{
+    <p>Loading...</p>
+}
+else if (!comics.Any())
+{
+    <p>No comics yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var comic in comics)
+        {
+            <li>
+                <strong>@comic.Title</strong>
+                @if (comic.StartYear is not null)
+                {
+                    <span>(@comic.StartYear)</span>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<ComicSummary>? comics;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var client = HttpClientFactory.CreateClient("ComicApi");
+        comics = await client.GetFromJsonAsync<List<ComicSummary>>("/api/comics");
+    }
+}
