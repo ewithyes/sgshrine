@@ -17,17 +17,19 @@ else if (!comics.Any())
 else
 {
     <ul>
-        @foreach (var comic in comics)
-        {
-            <li>
+    @foreach (var comic in comics)
+    {
+        <li>
+            <a href="/comics/@comic.Id">
                 <strong>@comic.Title</strong>
                 @if (comic.StartYear is not null)
                 {
                     <span>(@comic.StartYear)</span>
                 }
-            </li>
-        }
-    </ul>
+            </a>
+        </li>
+    }
+</ul>
 }
 
 @code {

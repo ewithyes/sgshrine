@@ -1,0 +1,36 @@
+@page "/comics/{Id:int}"
+@using SupergirlShrine.Web.Models
+@inject IHttpClientFactory HttpClientFactory
+
+<PageTitle>@(comic?.Title ?? "Loading...")</PageTitle>
+
+@if (comic is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h1>@comic.Title</h1>
+
+    <ul>
+        @foreach (var chapter in comic.Chapters.OrderBy(c => c.Order))
+        {
+            <li>
+                <a href="/comics/@Id/chapters/@chapter.Id">@chapter.Title</a>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private ComicDetailDto? comic;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var client = HttpClientFactory.CreateClient("ComicApi");
+        comic = await client.GetFromJsonAsync<ComicDetailDto>($"/api/comics/{Id}");
+    }
+}

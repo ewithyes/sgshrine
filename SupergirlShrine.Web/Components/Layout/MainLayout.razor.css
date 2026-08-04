@@ -77,6 +77,7 @@ main {
 }
 
 #blazor-error-ui {
+    display: none;
     color-scheme: light only;
     background: lightyellow;
     bottom: 0;
