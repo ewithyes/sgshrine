@@ -33,7 +33,9 @@ app.MapGet("/api/comics/{id}", async (int id, ComicDatabaseContext db) =>
         .Select(c => new ComicDetailDto(
             c.Id, c.Title, c.Author, c.Description, c.StartYear, c.CoverImage,
             c.Chapters.OrderBy(ch => ch.Order)
-                .Select(ch => new ChapterSummaryDto(ch.Id, ch.Title, ch.Order))
+                .Select(ch => new ChapterSummaryDto(ch.Id, ch.Title, ch.Order, ch.Pages.OrderBy(p => p.PageNumber)
+                    .Select(p => p.ImagePath)
+                    .FirstOrDefault()))
                 .ToList()))
         .FirstOrDefaultAsync();
 

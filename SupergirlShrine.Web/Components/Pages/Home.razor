@@ -16,20 +16,22 @@ else if (!comics.Any())
 }
 else
 {
-    <ul>
+    
     @foreach (var comic in comics)
     {
-        <li>
-            <a href="/comics/@comic.Id">
+        <div style="display: flex; flex-direction: row; gap: 1.5rem; padding: 1rem; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
+            <div style="display: flex; flex-direction: column; align-items: center; margin: 1rem; text-align: center;">
+                 <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comic.CoverImage" alt="@comic.Title" style="height: 400px; display: block; margin-bottom: 0.5rem;" />
+                <a href="/comics/@comic.Id" style="text-decoration: none; color: inherit;">
                 <strong>@comic.Title</strong>
                 @if (comic.StartYear is not null)
                 {
-                    <span>(@comic.StartYear)</span>
+                    <span> (@comic.StartYear)</span>
                 }
-            </a>
-        </li>
+                </a>
+            </div>
+        </div>
     }
-</ul>
 }
 
 @code {

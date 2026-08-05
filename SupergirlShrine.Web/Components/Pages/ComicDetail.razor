@@ -10,12 +10,21 @@
 }
 else
 {
-    <h1>@comic.Title</h1>
+    <h1>@comic.Title (@comic.StartYear)</h1>
+    @if (!string.IsNullOrEmpty(comic.Author))
+    {
+        <p><strong>Author:</strong> @comic.Author</p>
+    }
+    <p>@comic.Description</p>
 
     <ul>
         @foreach (var chapter in comic.Chapters.OrderBy(c => c.Order))
         {
             <li>
+                @if (!string.IsNullOrEmpty(chapter.CoverImagePath))
+                {
+                    <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@chapter.CoverImagePath" alt="@chapter.Title" style="height: 200px; display: block; margin-bottom: 0.5rem;" />
+                }
                 <a href="/comics/@Id/chapters/@chapter.Id">@chapter.Title</a>
             </li>
         }
