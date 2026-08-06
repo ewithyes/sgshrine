@@ -5,7 +5,7 @@
 
 <PageTitle>@(chapter?.Title ?? "Loading...")</PageTitle>
 
-<div class="reader-page">
+<div class="@GetReaderPageClass()">
 @if (chapter is null || comic is null)
 {
     <p class="status-text">Loading...</p>
@@ -17,14 +17,16 @@ else
         <h1>@chapter.Title</h1>
         <a class="back-link" href="/comics/@ComicId">&larr; Back to issue list</a>
         <div class="reader-controls">
-            <button class="nav-btn" disabled="@(previousChapterId is null)" @onclick="GoToPreviousChapter">
-                &larr; Previous Issue
+            <button class="mode-toggle" @onclick="ToggleFullscreen">&#9974;
+                @(isFullscreen ? " Exit fullscreen" : " Fullscreen mode")
             </button>
 
             <button class="mode-toggle" @onclick="ToggleViewMode">
-                @(viewMode == ViewMode.Scroll ? "Switch to page-by-page" : "Switch to scroll view")
+                @(viewMode == ViewMode.Scroll ? "Page-by-page view" : "Scroll view")
             </button>
-
+            <button class="nav-btn" disabled="@(previousChapterId is null)" @onclick="GoToPreviousChapter">
+                &larr; Previous Issue
+            </button>
             <button class="nav-btn" disabled="@(nextChapterId is null)" @onclick="GoToNextChapter">
                 Next Issue &rarr;
             </button>
@@ -34,26 +36,30 @@ else
     @if (viewMode == ViewMode.Scroll)
     {
         <div class="page-scroll">
-            @foreach (var comicPage in chapter.Pages.OrderBy(p => p.PageNumber))
+            @foreach (var comicPage in OrderedPages)
             {
-                <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comicPage.ImagePath" alt="Page @comicPage.PageNumber" class="page-image" />
+                <figure class="page-frame">
+                    <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comicPage.ImagePath" alt="Page @comicPage.PageNumber" class="page-image" loading="lazy" />
+                    <figcaption class="page-caption">Page @comicPage.PageNumber</figcaption>
+                </figure>
             }
         </div>
     }
     else
     {
-        var orderedPages = chapter.Pages.OrderBy(p => p.PageNumber).ToList();
-        var current = orderedPages[currentPageIndex];
+        var current = OrderedPages[currentPageIndex];
 
         <div class="page-single">
-            <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@current.ImagePath" alt="Page @current.PageNumber" class="page-image" />
+            <figure class="page-frame">
+                <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@current.ImagePath" alt="Page @current.PageNumber" class="page-image" loading="lazy" />
+            </figure>
 
             <div class="page-nav">
                 <button class="nav-btn" disabled="@(currentPageIndex == 0)" @onclick="PreviousPage">
                     &larr; Previous Page
                 </button>
-                <span class="page-counter">Page @(currentPageIndex + 1) of @orderedPages.Count</span>
-                <button class="nav-btn" disabled="@(currentPageIndex == orderedPages.Count - 1)" @onclick="NextPage">
+                <span class="page-counter">Page @current.PageNumber of @OrderedPages.Count</span>
+                <button class="nav-btn" disabled="@(currentPageIndex == OrderedPages.Count - 1)" @onclick="NextPage">
                     Next Page &rarr;
                 </button>
             </div>
@@ -86,9 +92,14 @@ else
     private ComicDetailDto? comic;
     private ViewMode viewMode = ViewMode.Scroll;
     private int currentPageIndex = 0;
+    private bool isFullscreen;
 
     private int? previousChapterId;
     private int? nextChapterId;
+
+    private List<PageDto> OrderedPages => chapter?.Pages.OrderBy(p => p.PageNumber).ToList() ?? [];
+
+    private string GetReaderPageClass() => isFullscreen ? "reader-page reader-page--fullscreen" : "reader-page";
 
     protected override async Task OnParametersSetAsync()
     {
@@ -115,9 +126,14 @@ else
         currentPageIndex = 0;
     }
 
+    private void ToggleFullscreen()
+    {
+        isFullscreen = !isFullscreen;
+    }
+
     private void NextPage()
     {
-        if (chapter is not null && currentPageIndex < chapter.Pages.Count - 1)
+        if (currentPageIndex < OrderedPages.Count - 1)
         {
             currentPageIndex++;
         }
