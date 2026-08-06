@@ -1,0 +1,127 @@
+.hero {
+    position: relative;
+    text-align: center;
+    padding: 5rem 1.5rem 4rem;
+    overflow: hidden;
+}
+
+.hero-glow {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(217, 164, 65, 0.18) 0%, rgba(217, 164, 65, 0) 70%);
+    pointer-events: none;
+}
+
+.hero h1 {
+    position: relative;
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 600;
+    color: #F0EAE0;
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+
+.hero-tagline {
+    position: relative;
+    color: #8A8494;
+    font-size: 1.05rem;
+    margin-top: 0.75rem;
+    font-style: italic;
+}
+
+.collection {
+    max-width: 1100px;
+    margin: 0;
+    padding: 3rem 2.5rem 4.5rem;
+    position: relative;
+    z-index: 3;
+}
+
+.kara-intro {
+    max-height: 400px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    justify-content: center;
+}
+
+.kara-portrait {
+    flex-shrink: 0;
+    width: 220px;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 1rem;
+}
+
+.kara-portrait img {
+    height: 700px;
+    display: block;
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 20px 40px rgba(217, 164, 65, 0.15));
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+.kara-text {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.eyebrow {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #D9A441;
+    margin-bottom: 0.5rem;
+}
+
+.kara-text h2 {
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: 1.8rem;
+    color: #F0EAE0;
+    margin: 0 0 1rem;
+}
+
+.kara-text p {
+    color: #C9C3D4;
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.kara-quote {
+    font-style: italic;
+    color: #8A8494;
+    border-left: 2px solid #D9A441;
+    padding-left: 1rem;
+}
+
+@media (max-width: 640px) {
+    .kara-intro {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .kara-quote {
+        border-left: none;
+        border-top: 2px solid #D9A441;
+        padding-left: 0;
+        padding-top: 0.75rem;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+}

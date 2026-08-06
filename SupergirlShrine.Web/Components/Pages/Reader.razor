@@ -4,23 +4,33 @@
 
 <PageTitle>@(chapter?.Title ?? "Loading...")</PageTitle>
 
-@if (chapter is null)
+<div class="reader-page">
+@if (chapter is null || comic is null)
 {
-    <p>Loading...</p>
+    <p class="status-text">Loading...</p>
 }
 else
 {
-    <h1>@chapter.Title</h1>
+    <section class="reader-hero">
+        <span class="eyebrow">@comic.Title</span>
+        <h1>@chapter.Title</h1>
+        <a class="back-link" href="/comics/@ComicId">&larr; Back to issue list</a>
+    </section>
 
-    <a href="/comics/@ComicId">&larr; Back to issue list</a>
+    <section class="reader-pages">
 
-    <div>
-    @foreach (var comicPage in chapter.Pages.OrderBy(p => p.PageNumber))
-    {
-        <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comicPage.ImagePath" alt="Page @comicPage.PageNumber" style="max-width: 100%; display: block; margin-bottom: 1rem;" />
-    }
-    </div>
+        <div class="page-stack">
+            @foreach (var comicPage in chapter.Pages.OrderBy(p => p.PageNumber))
+            {
+                <figure class="page-frame">
+                    <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comicPage.ImagePath" alt="Page @comicPage.PageNumber" loading="lazy" />
+                    <figcaption class="page-caption">Page @comicPage.PageNumber</figcaption>
+                </figure>
+            }
+        </div>
+    </section>
 }
+</div>
 
 @code {
     [Parameter]
@@ -30,10 +40,12 @@ else
     public int ChapterId { get; set; }
 
     private ChapterDetailDto? chapter;
+    private ComicDetailDto? comic;
 
     protected override async Task OnInitializedAsync()
     {
         var client = HttpClientFactory.CreateClient("ComicApi");
         chapter = await client.GetFromJsonAsync<ChapterDetailDto>($"/api/comics/{ComicId}/chapters/{ChapterId}");
+        comic = await client.GetFromJsonAsync<ComicDetailDto>($"/api/comics/{ComicId}");
     }
 }

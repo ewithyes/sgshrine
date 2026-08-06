@@ -3,36 +3,58 @@
 @inject IHttpClientFactory HttpClientFactory
 
 <PageTitle>Supergirl Shrine</PageTitle>
+<section class="kara-intro">
+    <div class="kara-portrait">
+        <img src="images/kara-portrait.png" alt="Kara Zor-El" />
+    </div>
+    <div class="kara-text">
+        <h2>Kara Zor-El</h2>
+        <p>
+            Last daughter of Krypton. Sent to protect her infant cousin,
+            she arrived decades too late, and grew up in his shadow before
+            becoming a hero on her own terms.
+        </p>
+        <p class="kara-quote">"I'm not the Last Son of Krypton. I'm his cousin."</p>
+    </div>
+</section>
 
-<h1>Supergirl Shrine</h1>
-
+<div class="collection">
 @if (comics is null)
 {
-    <p>Loading...</p>
+    <p class="status-text">Loading...</p>
 }
 else if (!comics.Any())
 {
-    <p>No comics yet.</p>
+    <p class="status-text">No comics yet.</p>
 }
 else
 {
-    
-    @foreach (var comic in comics)
-    {
-        <div style="display: flex; flex-direction: row; gap: 1.5rem; padding: 1rem; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
-            <div style="display: flex; flex-direction: column; align-items: center; margin: 1rem; text-align: center;">
-                 <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comic.CoverImage" alt="@comic.Title" style="height: 400px; display: block; margin-bottom: 0.5rem;" />
-                <a href="/comics/@comic.Id" style="text-decoration: none; color: inherit;">
-                <strong>@comic.Title</strong>
-                @if (comic.StartYear is not null)
+    <div class="section-header">
+        <h2>Recently Added</h2>
+    </div>
+
+    <div class="comic-grid">
+        @foreach (var comic in comics)
+        {
+            <a class="comic-card" href="/comics/@comic.Id">
+                @if (comic.CoverImage is not null)
                 {
-                    <span> (@comic.StartYear)</span>
+                    <div class="cover-wrap">
+                        <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comic.CoverImage" alt="@comic.Title" />
+                    </div>
                 }
-                </a>
-            </div>
-        </div>
-    }
+                <div class="comic-meta">
+                    <span class="comic-title">@comic.Title</span>
+                    @if (comic.StartYear is not null)
+                    {
+                        <span class="comic-year">@comic.StartYear</span>
+                    }
+                </div>
+            </a>
+        }
+    </div>
 }
+</div>
 
 @code {
     private List<ComicSummary>? comics;

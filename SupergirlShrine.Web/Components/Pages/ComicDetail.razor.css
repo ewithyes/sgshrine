@@ -1,0 +1,71 @@
+.comic-hero {
+    text-align: left;
+    padding: 4rem 1.5rem 2.5rem;
+}
+
+.comic-hero .eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.95rem;
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: 0.98rem;
+    line-height: 1.2;
+}
+
+.comic-hero .eyebrow-year {
+    color: #B9B1C9;
+    font-style: italic;
+    letter-spacing: 0.01em;
+}
+
+.comic-hero .eyebrow-separator {
+    color: #8A8494;
+    opacity: 0.85;
+    font-style: italic;
+}
+
+.comic-hero .eyebrow-author {
+    color: #B9B1C9;
+    font-style: italic;
+    letter-spacing: 0.01em;
+}
+
+.comic-hero h1 {
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: #F0EAE0;
+    margin: 0 0 1.5rem;
+}
+
+.back-link {
+    color: #8A8494;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #D9A441;
+}
+
+.chapters {
+    max-width: 1100px;
+    margin: 0;
+    padding: 3rem 2.5rem 4.5rem;
+}
+.comic-description {
+    max-width: 600px;
+    margin: 0 0 2rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #F0EAE0;
+}
+
+@media (max-width: 640px) {
+    .chapters {
+        padding: 2rem 1.25rem 3rem;
+    }
+}

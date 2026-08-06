@@ -1,0 +1,95 @@
+.reader-page {
+    max-width: 1100px;
+    margin: 0;
+    padding: 2rem 1.5rem 4rem;
+}
+
+.reader-hero {
+    text-align: left;
+    padding: 4rem 1.5rem 2.5rem;
+}
+
+.reader-hero .eyebrow {
+    display: block;
+    margin-bottom: 0.95rem;
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: 0.98rem;
+    line-height: 1.2;
+    color: #B9B1C9;
+    font-style: italic;
+    letter-spacing: 0.01em;
+}
+
+.reader-hero h1 {
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: #F0EAE0;
+    margin: 0 0 1rem;
+}
+
+.reader-description {
+    max-width: 640px;
+    margin: 0 0 1.75rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #C9C3D4;
+}
+
+.back-link {
+    color: #8A8494;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #D9A441;
+}
+
+.reader-pages {
+    padding-top: 1rem;
+}
+
+.page-stack {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.page-frame {
+    margin: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background:transparent;
+}
+
+.page-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.page-caption {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    text-align: left;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8A8494;
+    border-top: 1px solid rgba(217, 164, 65, 0.12);
+}
+
+@media (max-width: 640px) {
+    .reader-page {
+        padding: 1rem 1rem 3rem;
+    }
+
+    .reader-hero {
+        padding: 3rem 0.5rem 2rem;
+    }
+
+    .reader-description {
+        font-size: 0.98rem;
+    }
+}

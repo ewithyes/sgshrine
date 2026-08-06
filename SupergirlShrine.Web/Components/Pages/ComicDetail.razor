@@ -1,34 +1,58 @@
 @page "/comics/{Id:int}"
 @using SupergirlShrine.Web.Models
+@using Microsoft.AspNetCore.Components.Web
 @inject IHttpClientFactory HttpClientFactory
 
 <PageTitle>@(comic?.Title ?? "Loading...")</PageTitle>
 
 @if (comic is null)
 {
-    <p>Loading...</p>
+    <p class="status-text">Loading...</p>
 }
 else
 {
-    <h1>@comic.Title (@comic.StartYear)</h1>
-    @if (!string.IsNullOrEmpty(comic.Author))
-    {
-        <p><strong>Author:</strong> @comic.Author</p>
-    }
-    <p>@comic.Description</p>
-
-    <ul>
-        @foreach (var chapter in comic.Chapters.OrderBy(c => c.Order))
-        {
-            <li>
-                @if (!string.IsNullOrEmpty(chapter.CoverImagePath))
+    <section class="comic-hero">
+        <div class="eyebrow" aria-label="Comic metadata">
+            @if (comic.StartYear is not null)
+            {
+                <span class="eyebrow-year">Start year: @comic.StartYear</span>
+            }
+            @if (!string.IsNullOrWhiteSpace(comic.Author))
+            {
+                @if (comic.StartYear is not null)
                 {
-                    <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@chapter.CoverImagePath" alt="@chapter.Title" style="height: 200px; display: block; margin-bottom: 0.5rem;" />
+                    <span class="eyebrow-separator">/</span>
                 }
-                <a href="/comics/@Id/chapters/@chapter.Id">@chapter.Title</a>
-            </li>
-        }
-    </ul>
+                <span class="eyebrow-author">Written by @comic.Author</span>
+            }
+        </div>
+        <h1>@comic.Title</h1>
+        <p class="comic-description">@comic.Description</p>
+        <a class="back-link" href="/">&larr; Back to the collection</a>
+    </section>
+
+    <section class="chapters">
+        <div class="section-header">
+            <h2>Issues</h2>
+        </div>
+
+        <div class="comic-grid">
+            @foreach (var chapter in comic.Chapters.OrderBy(c => c.Order))
+            {
+                <a class="comic-card" href="/comics/@Id/chapters/@chapter.Id">
+                    @if (chapter.CoverImagePath is not null)
+                    {
+                        <div class="cover-wrap">
+                            <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@chapter.CoverImagePath" alt="@chapter.Title" />
+                        </div>
+                    }
+                    <div class="comic-meta">
+                        <span class="comic-title">@chapter.Title</span>
+                    </div>
+                </a>
+            }
+        </div>
+    </section>
 }
 
 @code {
