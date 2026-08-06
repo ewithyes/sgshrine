@@ -1,0 +1,60 @@
+@page "/comics"
+@using SupergirlShrine.Web.Models
+@inject IHttpClientFactory HttpClientFactory
+
+<PageTitle>All Comics</PageTitle>
+
+<div class="collection">
+@if (comics is null)
+{
+    <p class="status-text">Loading...</p>
+}
+else if (!comics.Any())
+{
+    <p class="status-text">No comics yet.</p>
+}
+else
+{
+    <div class="section-header">
+        <h2>All Comic books</h2>
+    </div>
+    <div class="search-container">
+    <input type="text" placeholder="Search comics..." @bind="searchTerm" class="search-input" @bind:event="oninput" />
+    <span class="search-icon">&#128269;</span>
+    </div>
+    <div class="comic-grid">
+        <div class="kara-image">
+        <img src="images/sg.png" alt="Kara Zor-El" />
+        </div>
+        @foreach (var comic in filteredComics)
+        {
+            <a class="comic-card" href="/comics/@comic.Id">
+                @if (comic.CoverImage is not null)
+                {
+                    <div class="cover-wrap">
+                        <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comic.CoverImage" alt="@comic.Title" />
+                    </div>
+                }
+                <div class="comic-meta">
+                    <span class="comic-title">@comic.Title</span>
+                    @if (comic.StartYear is not null)
+                    {
+                        <span class="comic-year">@comic.StartYear</span>
+                    }
+                </div>
+            </a>
+        }
+    </div>}
+</div>
+@code {
+    private List<ComicSummary>? comics;
+    private string searchTerm = string.Empty;
+
+    private IEnumerable<ComicSummary> filteredComics => comics?.Where(c => c.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || c.Author.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ?? Enumerable.Empty<ComicSummary>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var client = HttpClientFactory.CreateClient("ComicApi");
+        comics = await client.GetFromJsonAsync<List<ComicSummary>>("/api/comics");
+    }
+}
