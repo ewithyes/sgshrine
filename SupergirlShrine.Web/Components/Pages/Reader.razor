@@ -1,6 +1,7 @@
 @page "/comics/{ComicId:int}/chapters/{ChapterId:int}"
 @using SupergirlShrine.Web.Models
 @inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager Navigation
 
 <PageTitle>@(chapter?.Title ?? "Loading...")</PageTitle>
 
@@ -15,24 +16,66 @@ else
         <span class="eyebrow">@comic.Title</span>
         <h1>@chapter.Title</h1>
         <a class="back-link" href="/comics/@ComicId">&larr; Back to issue list</a>
+        <div class="reader-controls">
+            <button class="nav-btn" disabled="@(previousChapterId is null)" @onclick="GoToPreviousChapter">
+                &larr; Previous Issue
+            </button>
+
+            <button class="mode-toggle" @onclick="ToggleViewMode">
+                @(viewMode == ViewMode.Scroll ? "Switch to page-by-page" : "Switch to scroll view")
+            </button>
+
+            <button class="nav-btn" disabled="@(nextChapterId is null)" @onclick="GoToNextChapter">
+                Next Issue &rarr;
+            </button>
+        </div>
     </section>
 
-    <section class="reader-pages">
-
-        <div class="page-stack">
+    @if (viewMode == ViewMode.Scroll)
+    {
+        <div class="page-scroll">
             @foreach (var comicPage in chapter.Pages.OrderBy(p => p.PageNumber))
             {
-                <figure class="page-frame">
-                    <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comicPage.ImagePath" alt="Page @comicPage.PageNumber" loading="lazy" />
-                    <figcaption class="page-caption">Page @comicPage.PageNumber</figcaption>
-                </figure>
+                <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comicPage.ImagePath" alt="Page @comicPage.PageNumber" class="page-image" />
             }
+        </div>
+    }
+    else
+    {
+        var orderedPages = chapter.Pages.OrderBy(p => p.PageNumber).ToList();
+        var current = orderedPages[currentPageIndex];
+
+        <div class="page-single">
+            <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@current.ImagePath" alt="Page @current.PageNumber" class="page-image" />
+
+            <div class="page-nav">
+                <button class="nav-btn" disabled="@(currentPageIndex == 0)" @onclick="PreviousPage">
+                    &larr; Previous Page
+                </button>
+                <span class="page-counter">Page @(currentPageIndex + 1) of @orderedPages.Count</span>
+                <button class="nav-btn" disabled="@(currentPageIndex == orderedPages.Count - 1)" @onclick="NextPage">
+                    Next Page &rarr;
+                </button>
+            </div>
+        </div>
+    }
+
+    <section class="reader-footer">
+        <div class="reader-controls">
+            <button class="nav-btn" disabled="@(previousChapterId is null)" @onclick="GoToPreviousChapter">
+                &larr; Previous Issue
+            </button>
+            <button class="nav-btn" disabled="@(nextChapterId is null)" @onclick="GoToNextChapter">
+                Next Issue &rarr;
+            </button>
         </div>
     </section>
 }
 </div>
 
 @code {
+    private enum ViewMode { Scroll, Page }
+
     [Parameter]
     public int ComicId { get; set; }
 
@@ -41,11 +84,66 @@ else
 
     private ChapterDetailDto? chapter;
     private ComicDetailDto? comic;
+    private ViewMode viewMode = ViewMode.Scroll;
+    private int currentPageIndex = 0;
 
-    protected override async Task OnInitializedAsync()
+    private int? previousChapterId;
+    private int? nextChapterId;
+
+    protected override async Task OnParametersSetAsync()
     {
         var client = HttpClientFactory.CreateClient("ComicApi");
+
         chapter = await client.GetFromJsonAsync<ChapterDetailDto>($"/api/comics/{ComicId}/chapters/{ChapterId}");
         comic = await client.GetFromJsonAsync<ComicDetailDto>($"/api/comics/{ComicId}");
+
+        currentPageIndex = 0;
+
+        if (comic is not null)
+        {
+            var orderedChapters = comic.Chapters.OrderBy(c => c.Order).ToList();
+            var currentIndex = orderedChapters.FindIndex(c => c.Id == ChapterId);
+
+            previousChapterId = currentIndex > 0 ? orderedChapters[currentIndex - 1].Id : null;
+            nextChapterId = currentIndex < orderedChapters.Count - 1 ? orderedChapters[currentIndex + 1].Id : null;
+        }
+    }
+
+    private void ToggleViewMode()
+    {
+        viewMode = viewMode == ViewMode.Scroll ? ViewMode.Page : ViewMode.Scroll;
+        currentPageIndex = 0;
+    }
+
+    private void NextPage()
+    {
+        if (chapter is not null && currentPageIndex < chapter.Pages.Count - 1)
+        {
+            currentPageIndex++;
+        }
+    }
+
+    private void PreviousPage()
+    {
+        if (currentPageIndex > 0)
+        {
+            currentPageIndex--;
+        }
+    }
+
+    private void GoToNextChapter()
+    {
+        if (nextChapterId is not null)
+        {
+            Navigation.NavigateTo($"/comics/{ComicId}/chapters/{nextChapterId}");
+        }
+    }
+
+    private void GoToPreviousChapter()
+    {
+        if (previousChapterId is not null)
+        {
+            Navigation.NavigateTo($"/comics/{ComicId}/chapters/{previousChapterId}");
+        }
     }
 }

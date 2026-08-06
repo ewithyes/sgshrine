@@ -93,3 +93,102 @@
         font-size: 0.98rem;
     }
 }
+.reader-header {
+    text-align: center;
+    padding: 3rem 1.5rem 1.5rem;
+}
+
+.reader-header h1 {
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: #F0EAE0;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.back-link {
+    color: #8A8494;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #D9A441;
+}
+
+.reader-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.nav-btn, .mode-toggle {
+    background: rgba(240, 234, 224, 0.05);
+    border: 1px solid rgba(240, 234, 224, 0.15);
+    color: #F0EAE0;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled), .mode-toggle:hover {
+    border-color: #D9A441;
+    color: #D9A441;
+}
+
+.nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.mode-toggle {
+    color: #D9A441;
+    border-color: rgba(217, 164, 65, 0.3);
+}
+
+.page-scroll {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 3rem;
+}
+
+.page-image {
+    width: 100%;
+    display: block;
+    margin-bottom: 1.5rem;
+    border-radius: 2px;
+}
+
+.page-single {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 2rem;
+    text-align: center;
+}
+
+.page-single .page-image {
+    margin-bottom: 1.5rem;
+}
+
+.page-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.page-counter {
+    color: #8A8494;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+
+.reader-footer {
+    padding: 2rem 1.5rem 4rem;
+}
