@@ -19,50 +19,49 @@
     </div>
 </section>
 
-<div class="collection">
-@if (comics is null)
+<section class="continue-reading">
+        <div class="section-header">
+            <h2>Continue Reading</h2>
+        </div>
+@if (continueReading is null)
 {
     <p class="status-text">Loading...</p>
 }
-else if (!comics.Any())
+else if (!continueReading.Any())
 {
-    <p class="status-text">No comics yet.</p>
+    <p class="status-text">You haven't started reading any comics yet.</p>
 }
 else
 {
-    <div class="section-header">
-        <h2>Recently Added</h2>
-    </div>
-
-    <div class="comic-grid">
-        @foreach (var comic in comics)
-        {
-            <a class="comic-card" href="/comics/@comic.Id">
-                @if (comic.CoverImage is not null)
-                {
-                    <div class="cover-wrap">
-                        <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@comic.CoverImage" alt="@comic.Title" />
-                    </div>
-                }
-                <div class="comic-meta">
-                    <span class="comic-title">@comic.Title</span>
-                    @if (comic.StartYear is not null)
+        <div class="comic-grid">
+            @foreach (var item in continueReading)
+            {
+                <a class="comic-card" href="/comics/@item.Id/chapters/@item.ChapterId?page=@item.PageNumber">
+                    @if (item.CoverImage is not null)
                     {
-                        <span class="comic-year">@comic.StartYear</span>
+                        <div class="cover-wrap">
+                            <img src="https://pub-3a5753cb329f41e1af6d4aa25e14df10.r2.dev/@item.CoverImage" alt="@item.Title" />
+                        </div>
                     }
-                </div>
-            </a>
-        }
-    </div>
+                    <div class="comic-meta">
+                        <span class="comic-title">@item.Title</span>
+                        <span class="comic-year">@item.ChapterTitle · Page @item.PageNumber</span>
+                    </div>
+                </a>
+            }
+        </div>
 }
-</div>
+ </section>
 
 @code {
-    private List<ComicSummary>? comics;
+    private List<ContinueReadingDto>? continueReading;
+
 
     protected override async Task OnInitializedAsync()
     {
         var client = HttpClientFactory.CreateClient("ComicApi");
-        comics = await client.GetFromJsonAsync<List<ComicSummary>>("/api/comics");
+        continueReading = await client.GetFromJsonAsync<List<ContinueReadingDto>>("/api/comics/continue-reading");
+
     }
+
 }

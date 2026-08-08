@@ -19,41 +19,110 @@
 
 .site-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem 2rem;
+    justify-content: center;
+    padding: 1.5rem 2rem;
     border-bottom: 1px solid rgba(240, 234, 224, 0.08);
 }
 
-.wordmark {
-    font-family: 'Fraunces', 'Georgia', serif;
-    font-size: 1.1rem;
-    color: #F0EAE0;
-    text-decoration: none;
-    letter-spacing: 0.02em;
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
 }
 
-.site-header nav a {
-    color: #8A8494;
-    text-decoration: none;
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: color 0.2s ease;
-    border-bottom: 2px solid transparent;
+.logo-link {
+    display: block;
 }
 
-.site-header nav a:hover {
-    color: #D9A441;
-    border-bottom: 2px solid #D9A441;
-}
-.site-footer {
-    text-align: center;
-    padding: 1rem 0;
-    font-size: 0.8rem;
-    color: #8A8494;
-}
 .logo {
     height: 100px;
-    margin-right: 1rem;
+    width: auto;
+    display: block;
+}
+
+.nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Fraunces', 'Georgia', serif;
+    color: #8A8494;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.nav-link .mark {
+    position: relative;
+    color: #D9A441;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    background: transparent;
+}
+.nav-text {
+    position: relative;
+}
+
+.nav-link:hover {
+    color: #F0EAE0;
+    text-shadow: 0 0 12px rgba(217, 164, 65, 0.5);
+}
+
+.nav-link:hover .mark {
+    opacity: 1;
+    transform: rotate(90deg) scale(1.15);
+}
+
+/* the two sparks */
+.nav-text::before,
+.nav-text::after {
+    content: '✦';
+    position: absolute;
+    font-size: 0.5rem;
+    color: #D9A441;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.5s ease;
+}
+
+.nav-text::before {
+    top: -6px;
+    right: -10px;
+    transform: translate(0, 0) scale(0.5);
+}
+
+.nav-text::after {
+    bottom: -6px;
+    right: -18px;
+    transform: translate(0, 0) scale(0.5);
+}
+
+.nav-link:hover .nav-text::before {
+    opacity: 1;
+    transform: translate(4px, -4px) scale(1);
+}
+
+.nav-link:hover .nav-text::after {
+    opacity: 1;
+    transform: translate(4px, 4px) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-link, .nav-link .mark, .nav-link .mark::before, .nav-link .mark::after {
+        transition: none;
+    }
+}
+.site-footer {
+    display: flex;
+    font-family: 'Fraunces', 'Georgia', serif;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 1rem;
+    color: #8A8494;
+    letter-spacing: 0.05em;
 }

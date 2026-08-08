@@ -2,7 +2,6 @@
     display: flex;
     justify-content:flex-start;
     text-align: center;
-    margin-bottom:2rem;
     padding: 10px 10px 10px 0;
     position: relative;
     width: 100%;
@@ -38,6 +37,44 @@ input.search-input {
 }
 .kara-image img {
     height: 280px;
+    display: block;
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 20px 40px rgba(217, 164, 65, 0.15));
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+.kara-image {
+    flex-shrink: 0;
+    width: 220px;
     position: relative;
-    z-index:2;
+    z-index: 2;
+    padding-bottom: 1rem;
+}
+.user-controls {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+#sortSelect {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+#sortSelect-label {
+    font-family: 'Fraunces', 'Georgia', serif;
+    margin-right: 0.5rem;
+    font-size: 16px;
+    color: rgb(251, 242, 233);
+}
+#sortSelect:hover {
+    background-color: #f9e8c9;
+    cursor: pointer;
 }

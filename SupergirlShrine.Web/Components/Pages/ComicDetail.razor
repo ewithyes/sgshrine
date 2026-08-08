@@ -13,9 +13,15 @@ else
 {
     <section class="comic-hero">
         <div class="eyebrow" aria-label="Comic metadata">
-            @if (comic.StartYear is not null)
+            @if (comic.StartYear is not null && comic.EndYear is not null && comic.EndYear != comic.StartYear)
             {
-                <span class="eyebrow-year">Start year: @comic.StartYear</span>
+                <span class="eyebrow-year">@comic.StartYear - @comic.EndYear</span>
+            } else if (comic.StartYear is not null && comic.EndYear is not null && comic.EndYear == comic.StartYear){
+                <span class="eyebrow-year">@comic.StartYear</span>
+            } 
+            else if (comic.StartYear is not null)
+            {
+                <span class="eyebrow-year">@comic.StartYear - @comic.EndYear</span>
             }
             @if (!string.IsNullOrWhiteSpace(comic.Author))
             {
@@ -28,7 +34,7 @@ else
         </div>
         <h1>@comic.Title</h1>
         <p class="comic-description">@comic.Description</p>
-        <a class="back-link" href="/">&larr; Back to the collection</a>
+        <a class="back-link" href="/comics">&larr; Back to the collection</a>
     </section>
 
     <section class="chapters">

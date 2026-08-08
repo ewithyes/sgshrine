@@ -1,4 +1,5 @@
 @page "/comics/{ComicId:int}/chapters/{ChapterId:int}"
+
 @using SupergirlShrine.Web.Models
 @inject IHttpClientFactory HttpClientFactory
 @inject NavigationManager Navigation
@@ -88,6 +89,9 @@ else
     [Parameter]
     public int ChapterId { get; set; }
 
+
+    [SupplyParameterFromQuery(Name = "page")]
+    public int? StartPage { get; set; }
     private ChapterDetailDto? chapter;
     private ComicDetailDto? comic;
     private ViewMode viewMode = ViewMode.Scroll;
@@ -102,23 +106,43 @@ else
     private string GetReaderPageClass() => isFullscreen ? "reader-page reader-page--fullscreen" : "reader-page";
 
     protected override async Task OnParametersSetAsync()
+{
+    var client = HttpClientFactory.CreateClient("ComicApi");
+
+    chapter = await client.GetFromJsonAsync<ChapterDetailDto>($"/api/comics/{ComicId}/chapters/{ChapterId}");
+    comic = await client.GetFromJsonAsync<ComicDetailDto>($"/api/comics/{ComicId}");
+
+    if (comic is not null)
     {
-        var client = HttpClientFactory.CreateClient("ComicApi");
+        var orderedChapters = comic.Chapters.OrderBy(c => c.Order).ToList();
+        var currentIndex = orderedChapters.FindIndex(c => c.Id == ChapterId);
 
-        chapter = await client.GetFromJsonAsync<ChapterDetailDto>($"/api/comics/{ComicId}/chapters/{ChapterId}");
-        comic = await client.GetFromJsonAsync<ComicDetailDto>($"/api/comics/{ComicId}");
+        previousChapterId = currentIndex > 0 ? orderedChapters[currentIndex - 1].Id : null;
+        nextChapterId = currentIndex < orderedChapters.Count - 1 ? orderedChapters[currentIndex + 1].Id : null;
+    }
 
-        currentPageIndex = 0;
+    if (chapter is not null)
+    {
+        var orderedPages = chapter.Pages.OrderBy(p => p.PageNumber).ToList();
 
-        if (comic is not null)
+        if (StartPage is not null)
         {
-            var orderedChapters = comic.Chapters.OrderBy(c => c.Order).ToList();
-            var currentIndex = orderedChapters.FindIndex(c => c.Id == ChapterId);
+            var matchIndex = orderedPages.FindIndex(p => p.PageNumber == StartPage);
+            currentPageIndex = matchIndex >= 0 ? matchIndex : 0;
+            viewMode = ViewMode.Page;
+        }
+        else
+        {
+            currentPageIndex = 0;
+        }
 
-            previousChapterId = currentIndex > 0 ? orderedChapters[currentIndex - 1].Id : null;
-            nextChapterId = currentIndex < orderedChapters.Count - 1 ? orderedChapters[currentIndex + 1].Id : null;
+        var firstPage = orderedPages.ElementAtOrDefault(currentPageIndex);
+        if (firstPage is not null)
+        {
+            await SaveProgress(firstPage.PageNumber);
         }
     }
+}
 
     private void ToggleViewMode()
     {
@@ -131,21 +155,23 @@ else
         isFullscreen = !isFullscreen;
     }
 
-    private void NextPage()
+private async Task NextPage()
+{
+    if (currentPageIndex < OrderedPages.Count - 1)
     {
-        if (currentPageIndex < OrderedPages.Count - 1)
-        {
-            currentPageIndex++;
-        }
+        currentPageIndex++;
+        await SaveProgress(OrderedPages[currentPageIndex].PageNumber);
     }
+}
 
-    private void PreviousPage()
+private async Task PreviousPage()
+{
+    if (currentPageIndex > 0)
     {
-        if (currentPageIndex > 0)
-        {
-            currentPageIndex--;
-        }
+        currentPageIndex--;
+        await SaveProgress(OrderedPages[currentPageIndex].PageNumber);
     }
+}
 
     private void GoToNextChapter()
     {
@@ -161,5 +187,14 @@ else
         {
             Navigation.NavigateTo($"/comics/{ComicId}/chapters/{previousChapterId}");
         }
+    }
+    private async Task SaveProgress(int pageNumber)
+    {
+        var client = HttpClientFactory.CreateClient("ComicApi");
+        await client.PostAsJsonAsync($"/api/comics/{ComicId}/progress", new
+        {
+            chapterId = ChapterId,
+            pageNumber
+        });
     }
 }

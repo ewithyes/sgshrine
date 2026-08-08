@@ -2,18 +2,24 @@
 
 <div class="page">
     <header class="site-header">
-        <img src="images/logo.png" alt="Supergirl Shrine Logo" class="logo" />
-        <nav style="display: flex; gap: 1rem; align-items: center;">
-            <a href="/">Home</a>
-            <a href="/comics">All Comics</a>
+        <nav class="site-nav">
+            
+            <a href="/comics" class="nav-link" ActiveClass="nav-link--active">
+               <span class="mark">✦</span><span class="nav-text">Placeholder</span></a>
+            <a href="/" class="logo-link">
+                <img src="images/logo.png" alt="Supergirl Shrine" class="logo" />
+            </a>
+            <a href="/comics" class="nav-link" ActiveClass="nav-link--active">
+               <span class="mark">✦</span><span class="nav-text">All Comics</span></a>
         </nav>
     </header>
 
     <main>
         @Body
     </main>
+
     <footer class="site-footer">
-        <p>&copy; 2024 Supergirl Shrine</p>
+        <p>&copy; 2024 Supergirl Shrine. All rights reserved.</p>
     </footer>
 </div>
 

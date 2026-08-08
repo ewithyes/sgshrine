@@ -18,9 +18,18 @@ else
     <div class="section-header">
         <h2>All Comic books</h2>
     </div>
+    <div class="user-controls">
     <div class="search-container">
     <input type="text" placeholder="Search comics..." @bind="searchTerm" class="search-input" @bind:event="oninput" />
     <span class="search-icon">&#128269;</span>
+    </div>
+    <div class=sort-container>
+        <label id="sortSelect-label" for="sortSelect">Sort by:</label>
+        <select id="sortSelect" @onchange="SortComics">
+            <option value="title">Title</option>
+            <option value="year">Start Year</option>
+        </select>
+    </div>
     </div>
     <div class="comic-grid">
         <div class="kara-image">
@@ -37,9 +46,15 @@ else
                 }
                 <div class="comic-meta">
                     <span class="comic-title">@comic.Title</span>
-                    @if (comic.StartYear is not null)
+                    @if (comic.StartYear is not null && comic.EndYear is not null && comic.EndYear != comic.StartYear)
                     {
+                        <span class="comic-year">@comic.StartYear - @comic.EndYear</span>
+                    } else if (comic.StartYear is not null && comic.EndYear is not null && comic.EndYear == comic.StartYear){
                         <span class="comic-year">@comic.StartYear</span>
+                    } 
+                    else if (comic.StartYear is not null)
+                    {
+                        <span class="comic-year">@comic.StartYear -</span>
                     }
                 </div>
             </a>
@@ -49,7 +64,19 @@ else
 @code {
     private List<ComicSummary>? comics;
     private string searchTerm = string.Empty;
-
+    private string sortOption = "title";
+    private void SortComics(ChangeEventArgs e)
+    {
+        sortOption = e.Value?.ToString() ?? "title";
+        if (comics is not null)
+        {
+            comics = sortOption switch
+            {
+                "year" => comics.OrderBy(c => c.StartYear).ToList(),
+                _ => comics.OrderBy(c => c.Title).ToList(),
+            };
+        }
+    }
     private IEnumerable<ComicSummary> filteredComics => comics?.Where(c => c.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || c.Author.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ?? Enumerable.Empty<ComicSummary>();
 
     protected override async Task OnInitializedAsync()

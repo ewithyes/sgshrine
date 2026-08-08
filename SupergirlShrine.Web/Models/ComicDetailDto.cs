@@ -6,6 +6,7 @@ namespace SupergirlShrine.Web.Models
         string? Author,
         string? Description,
         int? StartYear,
+        int? EndYear,   
         string? CoverImage,
         List<ChapterSummary> Chapters
     );
