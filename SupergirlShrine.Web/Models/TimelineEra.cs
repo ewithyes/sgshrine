@@ -1,0 +1,1 @@
+public record TimelineEra(string Title, string YearRange, string Description, int? ComicId);

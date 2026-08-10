@@ -44,6 +44,19 @@ app.MapGet("/api/comics/continue-reading", async (ComicDatabaseContext db) =>
     return Results.Ok(comics);
 });
 
+app.MapGet("/api/comics/stats", async (ComicDatabaseContext db) =>
+{
+    var totalComics = await db.Comics.CountAsync();
+    var totalIssues = await db.Chapters.CountAsync();
+    var lastVisited = await db.Comics
+        .Where(c => c.LastReadDate != null)
+        .OrderByDescending(c => c.LastReadDate)
+        .Select(c => c.LastReadDate)
+        .FirstOrDefaultAsync();
+
+    return Results.Ok(new ArchiveStatsDto(totalComics, totalIssues, lastVisited));
+});
+
 app.MapGet("/api/comics/{id}", async (int id, ComicDatabaseContext db) =>
 {
     var comic = await db.Comics
@@ -89,6 +102,5 @@ app.MapPost("/api/comics/{comicId}/progress", async (int comicId, SaveProgressRe
     await db.SaveChangesAsync();
     return Results.Ok();
 });
-
 
 app.Run();

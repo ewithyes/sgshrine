@@ -6,3 +6,4 @@ public record ChapterDetailDto(int Id, string Title, int Order, List<PageDto> Pa
 public record PageDto(int Id, int PageNumber, string ImagePath);
 public record SaveProgressRequest(int ChapterId, int PageNumber);
 public record ContinueReadingDto(int Id, string Title, string? CoverImage, int ChapterId, int PageNumber, string ChapterTitle);
+public record ArchiveStatsDto(int TotalComics, int TotalChapters, DateTime? LastVisited);

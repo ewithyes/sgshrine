@@ -3,6 +3,8 @@
 @inject IHttpClientFactory HttpClientFactory
 
 <PageTitle>Supergirl Shrine</PageTitle>
+<div class="home-layout">
+    <div class="home-main">
 <section class="kara-intro">
     <div class="kara-portrait">
         <img src="images/kara-portrait.png" alt="Kara Zor-El" />
@@ -52,15 +54,46 @@ else
         </div>
 }
  </section>
+ </div>
+<aside class="ledger-wrapper">
+    <img src="/images/karara.png" alt="Kara Zor-El" class="ledger-peek" />
+ <div class="archive-ledger">
+        @if (stats is not null)
+        {
+            <h3>Quick Stats</h3>
+
+            <dl class="ledger-stats">
+                <div class="ledger-row">
+                    <dt>Catalogued Comics</dt>
+                    <dd>@stats.TotalComics</dd>
+                </div>
+                <div class="ledger-row">
+                    <dt>Catalogued Issues</dt>
+                    <dd>@stats.TotalChapters</dd>
+                </div>
+                @if (stats.LastVisited is not null)
+                {
+                    <div class="ledger-row">
+                        <dt>Last read on </dt>
+                        <dd>@stats.LastVisited.Value.ToLocalTime().ToString("MMM d")</dd>
+                    </div>
+                }
+            </dl>
+            <img src="images/Supergirl-Logo.png" alt="Kara Zor-El" class="ledger-portrait" />
+        }
+    </div>
+</aside>
+</div>
 
 @code {
     private List<ContinueReadingDto>? continueReading;
-
+    private ArchiveStats? stats;
 
     protected override async Task OnInitializedAsync()
     {
         var client = HttpClientFactory.CreateClient("ComicApi");
         continueReading = await client.GetFromJsonAsync<List<ContinueReadingDto>>("/api/comics/continue-reading");
+        stats = await client.GetFromJsonAsync<ArchiveStats>("/api/comics/stats");
 
     }
 

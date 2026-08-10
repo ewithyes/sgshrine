@@ -4,6 +4,8 @@
 
 <PageTitle>All Comics</PageTitle>
 
+<div class="home-layout">
+    <div class="home-main">
 <div class="collection">
 @if (comics is null)
 {
@@ -35,6 +37,12 @@ else
         <div class="kara-image">
         <img src="images/sg.png" alt="Kara Zor-El" />
         </div>
+        @if (filteredComics.Count() == 0)
+        {
+            <p class="status-text">No comics match your search.</p>
+        }
+        else
+        {
         @foreach (var comic in filteredComics)
         {
             <a class="comic-card" href="/comics/@comic.Id">
@@ -59,12 +67,47 @@ else
                 </div>
             </a>
         }
+        }
     </div>}
 </div>
+</div>
+
+<aside class="ledger-wrapper">
+    <img src="/images/karara.png" alt="Kara Zor-El" class="ledger-peek" />
+ <div class="archive-ledger">
+        @if (stats is not null)
+        {
+            <h3>Quick Stats</h3>
+
+            <dl class="ledger-stats">
+                <div class="ledger-row">
+                    <dt>Catalogued Comics</dt>
+                    <dd>@stats.TotalComics</dd>
+                </div>
+                <div class="ledger-row">
+                    <dt>Catalogued Issues</dt>
+                    <dd>@stats.TotalChapters</dd>
+                </div>
+                @if (stats.LastVisited is not null)
+                {
+                    <div class="ledger-row">
+                        <dt>Last read on</dt>
+                        <dd>@stats.LastVisited.Value.ToLocalTime().ToString("MMM d")</dd>
+                    </div>
+                }
+            </dl>
+            <img src="images/Supergirl-Logo.png" alt="Kara Zor-El" class="ledger-portrait" />
+        }
+    </div
+</aside>
+</div>
+
 @code {
     private List<ComicSummary>? comics;
     private string searchTerm = string.Empty;
     private string sortOption = "title";
+    private ArchiveStats? stats;
+
     private void SortComics(ChangeEventArgs e)
     {
         sortOption = e.Value?.ToString() ?? "title";
@@ -83,5 +126,6 @@ else
     {
         var client = HttpClientFactory.CreateClient("ComicApi");
         comics = await client.GetFromJsonAsync<List<ComicSummary>>("/api/comics");
+        stats = await client.GetFromJsonAsync<ArchiveStats>("/api/comics/stats");
     }
 }
