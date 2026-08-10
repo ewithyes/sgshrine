@@ -6,6 +6,7 @@
 
 <PageTitle>@(chapter?.Title ?? "Loading...")</PageTitle>
 
+<div class="reader-page">
 <div class="@GetReaderPageClass()">
 @if (chapter is null || comic is null)
 {
@@ -79,7 +80,7 @@ else
     </section>
 }
 </div>
-
+</div>
 @code {
     private enum ViewMode { Scroll, Page }
 

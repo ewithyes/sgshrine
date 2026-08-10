@@ -5,6 +5,7 @@
 
 <PageTitle>@(comic?.Title ?? "Loading...")</PageTitle>
 
+<div class="comic-detail">
 @if (comic is null)
 {
     <p class="status-text">Loading...</p>
@@ -60,6 +61,7 @@ else
         </div>
     </section>
 }
+</div>
 
 @code {
     [Parameter]

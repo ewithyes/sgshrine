@@ -85,17 +85,18 @@
     display: inline-block;
     max-width: 380px;
     padding: 1.25rem 1.5rem;
-    border-radius: 6px;
-    border: 1px solid rgba(240, 234, 224, 0.08);
+    border-radius: 10px;
+    background: rgba(125, 31, 23, 0.907);
+
 }
 
 .timeline-card--owned {
-    background: rgba(217, 164, 65, 0.04);
-    border-color: rgba(217, 164, 65, 0.2);
+    background: rgba(125, 31, 23, 0.907);
+    box-shadow: 1px 1px 8px rgba(217, 164, 65, 0.6);
 }
 
 .timeline-card--ghost {
-    opacity: 0.55;
+    opacity: 0.50;
 }
 
 .timeline-year {

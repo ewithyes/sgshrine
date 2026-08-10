@@ -214,7 +214,7 @@
     padding: 2rem;
     border-radius: 10px;
     filter: drop-shadow(0 20px 40px rgba(217, 164, 65, 0.15));
-    background: linear-gradient(180deg, rgba(217, 65, 65, 0.139), rgba(217, 65, 65, 0.267));
+    background: rgba(125, 31, 23, 0.907);
 }
 
 @media (max-width: 1400px) {

@@ -69,3 +69,7 @@
         padding: 2rem 1.25rem 3rem;
     }
 }
+.comic-detail {
+    max-width: 1100px;
+    margin: auto;
+}
