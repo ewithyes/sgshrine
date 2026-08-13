@@ -1,6 +1,6 @@
 # Supergirl Shrine
 
-A personal digital archive and reader dedicated to Kara Zor-El, built as a learning project ahead of an ASP.NET Core internship. Comics are imported from PDF scans, stored in the cloud, and read through a custom Blazor front end styled as a quiet, star-lit shrine rather than a generic app.
+A personal digital archive and reader dedicated to Kara Zor-El, built as a learning project. Comics are imported from PDF scans, stored in the cloud, and read through a custom Blazor front end styled as a quiet, star-lit shrine rather than a generic app.
 
 ## Stack
 
